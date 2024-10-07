@@ -40,6 +40,7 @@ exports.editPost = async (req, res) => {
     const updatedPost = await prisma.post.update({
       where: {
         id: postId,
+        authorId: userId,
       },
       data: {
         title: title ?? postExist.title,
@@ -59,12 +60,10 @@ exports.editPost = async (req, res) => {
 
 exports.findPost = async (req, res) => {
   const { postId } = req.body;
-  const { userId } = req.user;
   try {
     const postExist = await prisma.post.findUnique({
       where: {
         id: postId,
-        authorId: userId,
       },
     });
     if (!postExist) {
@@ -108,6 +107,7 @@ exports.deletePost = async (req, res) => {
     const deletedPost = await prisma.post.delete({
       where: {
         id: postId,
+        authorId: userId,
       },
     });
     res.status(201).json({
@@ -118,5 +118,19 @@ exports.deletePost = async (req, res) => {
   } catch (error) {
     console.log("Error is: ", error);
     res.status(500).json({ error: "Error deleting post", success: false });
+  }
+};
+
+exports.findAllPost = async (req, res) => {
+  try {
+    const foundAllPost = await prisma.post.findMany();
+    res.status(201).json({
+      message: "All posts found successfully",
+      success: true,
+      foundAllPost,
+    });
+  } catch (error) {
+    console.log("Error is: ", error);
+    res.status(500).json({ error: "Error finding all posts", success: false });
   }
 };
