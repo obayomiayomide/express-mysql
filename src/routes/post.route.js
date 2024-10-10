@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/create", authMiddleware, createPost);
 router.put("/edit", authMiddleware, editPost);
 router.delete("/delete", authMiddleware, deletePost);
-router.get("/find", authMiddleware, findPost);
-router.get("/findAll", authMiddleware, findAllPost);
+router.get("/find", findPost);
+router.get("/findAll", findAllPost);
 
 module.exports = router;
